@@ -11,11 +11,13 @@ export async function comparePassword(password: string, hash: string): Promise<b
 }
 
 export function sanitizeUser<T extends { password?: string }>(user: T): Omit<T, 'password'> {
-    const { password: _password, ...rest } = user;
+    const rest = { ...user };
+    delete rest.password;
     return rest;
 }
 
 export function sanitizeVendor<T extends { password?: string }>(vendor: T): Omit<T, 'password'> {
-    const { password: _password, ...rest } = vendor;
+    const rest = { ...vendor };
+    delete rest.password;
     return rest;
 }

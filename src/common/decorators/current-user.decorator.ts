@@ -24,11 +24,11 @@ export function isVendorPayload(payload: JwtPayload | undefined): payload is Jwt
 }
 
 export const CurrentUser = createParamDecorator((_data: unknown, ctx: ExecutionContext): JwtUserPayload => {
-    const request = ctx.switchToHttp().getRequest();
+    const request = ctx.switchToHttp().getRequest<{ user: JwtUserPayload }>();
     return request.user;
 });
 
 export const CurrentVendor = createParamDecorator((_data: unknown, ctx: ExecutionContext): JwtVendorPayload => {
-    const request = ctx.switchToHttp().getRequest();
+    const request = ctx.switchToHttp().getRequest<{ user: JwtVendorPayload }>();
     return request.user;
 });

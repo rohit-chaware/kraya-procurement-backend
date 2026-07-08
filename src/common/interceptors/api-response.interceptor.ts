@@ -1,4 +1,5 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
+import { Response } from 'express';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApiResponse, buildPaginatedApiResponse, buildSuccessResponse, isApiResponse, isPaginatedResult } from '../types/api-response.type';
@@ -6,7 +7,7 @@ import { ApiResponse, buildPaginatedApiResponse, buildSuccessResponse, isApiResp
 @Injectable()
 export class ApiResponseInterceptor implements NestInterceptor {
     intercept(context: ExecutionContext, next: CallHandler): Observable<ApiResponse> {
-        const response = context.switchToHttp().getResponse();
+        const response = context.switchToHttp().getResponse<Response>();
 
         return next.handle().pipe(
             map((data) => {

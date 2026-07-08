@@ -1,5 +1,4 @@
 import { ConflictException, Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { Prisma } from '../prisma/prisma-types';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateRoleDto, UpdateRoleDto } from './dto/role.dto';
 

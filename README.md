@@ -44,6 +44,8 @@ npm run start:dev
 
 ### Full Docker (API + Postgres)
 
+Runs migrations and seeds demo data automatically on startup.
+
 ```bash
 docker compose up --build
 ```
@@ -86,11 +88,11 @@ Vendor portal routes require: `Authorization: Bearer <vendor_jwt>` (from vendor 
 
 ### Users (Admin)
 
+- `POST /api/v1/users`
 - `GET /api/v1/users`
 - `GET /api/v1/users/:id`
 - `POST /api/v1/users/:id/roles`
-- `PATCH /api/v1/users/:id/activate`
-- `PATCH /api/v1/users/:id/deactivate`
+- `PATCH /api/v1/users/:id/status` — body: `{ "isActive": true | false }`
 
 ### Roles (Admin)
 
@@ -162,10 +164,10 @@ Actions: `create`, `read`, `update`, `delete`
 
 1. **Company model** added for referential integrity (`company_id` on items/indents/rfqs); not a full company management module.
 2. **Registration** assigns the default `Viewer` role if no `roleIds` are provided (after seed).
-3. **Item lock** is derived at runtime by checking usage in `indent_items`, `mi_items`, or `rfq_items`.
+3. **Item lock** is stored in the `is_locked` column and set when an item is used in an Indent, MI, or RFQ.
 4. **Indent approval** is allowed for any user with `indent.update` permission (no separate approver role).
 5. **Vendor quotes** can be updated via upsert until RFQ is closed.
-6. **Vendor portal** uses a separate JWT secret from internal users.
+6. **Vendor portal** uses the same `JWT_SECRET` as users; vendor tokens are distinguished by `type: "vendor"` in the payload.
 7. **Soft delete** implemented for items only (`is_deleted` flag).
 8. **Phone login** uses exact phone string match (include country code as stored).
 

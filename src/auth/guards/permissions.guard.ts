@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable, Logger } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { ActionType, EntityType, IS_ADMIN_ONLY_KEY, IS_PUBLIC_KEY, IS_VENDOR_ONLY_KEY, PERMISSION_KEY } from '../../common/constants/permissions';
-import { isUserPayload, isVendorPayload } from '../../common/decorators/current-user.decorator';
+import { isUserPayload, isVendorPayload, JwtPayload } from '../../common/decorators/current-user.decorator';
 import { PermissionsService } from '../../common/services/permissions.service';
 import { hasPermission } from '../../common/utils/permissions.util';
 
@@ -30,7 +30,7 @@ export class PermissionsGuard implements CanActivate {
             action: ActionType;
         }>(PERMISSION_KEY, [context.getHandler(), context.getClass()]);
 
-        const request = context.switchToHttp().getRequest();
+        const request = context.switchToHttp().getRequest<{ user?: JwtPayload }>();
         const principal = request.user;
 
         if (isVendorOnly) {
