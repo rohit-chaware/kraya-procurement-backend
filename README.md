@@ -10,7 +10,7 @@ NestJS + PostgreSQL + Prisma backend for a simplified procurement platform with 
 - **ORM:** Prisma
 - **Auth:** JWT (users + vendors)
 - **API:** REST (`/api/v1`)
-- **Bonus:** Docker, Pino logging, Swagger, rate limiting, unit tests, soft delete (items)
+- **Bonus:** Docker, Pino logging, Swagger, rate limiting, unit tests, soft delete (items), GitHub Actions CI
 
 ## Features
 
@@ -177,9 +177,25 @@ Actions: `create`, `read`, `update`, `delete`
 npm run start:dev      # Dev server with watch
 npm run build          # Compile
 npm run test           # Unit tests
+npm run test:e2e       # E2E tests
+npm run lint           # Lint and auto-fix
+npm run lint:check     # Lint only (used in CI)
 npm run prisma:migrate # Create/apply migrations
 npm run prisma:seed    # Seed demo data
 ```
+
+## CI (GitHub Actions)
+
+On every push and pull request to `main`/`master`, the workflow in `.github/workflows/ci.yml` runs:
+
+1. Copies `.env` → `.env` and loads variables into the job environment
+2. `npm ci`
+3. `npm run lint:check`
+4. `npm test`
+5. `npm run test:e2e`
+6. `npm run build`
+
+View pipeline status in the **Actions** tab after pushing to GitHub.
 
 ## Postman
 
