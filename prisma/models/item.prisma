@@ -1,0 +1,27 @@
+model Item {
+  id                  String   @id @default(uuid())
+  itemId              String   @unique @map("item_id")
+  companyId           String   @map("company_id")
+  itemCode            String   @map("item_code")
+  name                String
+  description         String?
+  unit                String
+  price               Decimal  @db.Decimal(12, 2)
+  createdByUserId     String   @map("created_by_user_id")
+  lastUpdatedByUserId String?  @map("last_updated_by_user_id")
+  isDeleted           Boolean  @default(false) @map("is_deleted")
+  isLocked            Boolean  @default(false) @map("is_locked")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  company     Company      @relation(fields: [companyId], references: [id])
+  createdBy   User         @relation("ItemCreatedBy", fields: [createdByUserId], references: [id])
+  updatedBy   User?        @relation("ItemUpdatedBy", fields: [lastUpdatedByUserId], references: [id])
+  indentItems IndentItem[]
+  miItems     MiItem[]
+  rfqItems    RfqItem[]
+
+  @@index([companyId])
+  @@index([itemCode])
+  @@map("items")
+}
